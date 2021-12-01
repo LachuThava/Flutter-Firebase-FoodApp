@@ -4,8 +4,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:my_app/Foods/FoodDetails.dart';
-import 'package:my_app/pages/ProductsVM.dart';
-import 'package:provider/provider.dart';
 
 // var snap = FirebaseFirestore.instance
 //     .collection("Payments")

@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/Foods/FoodDetails.dart';
-import 'package:my_app/pages/Products.dart';
 
 Map<String, dynamic> _mapSelectItem = {};
 //  MyCartApi my = new MyCartApi(_mapSelectedItem);
