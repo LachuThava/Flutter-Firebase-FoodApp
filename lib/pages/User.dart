@@ -69,7 +69,8 @@ class _userState extends State<user> {
                           createTiles(context, "Payments", ""),
                           createTiles(context, "Your cart", ""),
                           Container(
-                            width: width * 0.2,
+                            width: width,
+                            height: 40,
                             margin: EdgeInsets.all(30),
                             child: ElevatedButton(
                               onPressed: () {

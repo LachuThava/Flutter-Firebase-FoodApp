@@ -4,8 +4,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:my_app/Entity/Food.dart';
+import 'package:my_app/main.dart';
 
 import 'dart:collection';
+
+import 'package:my_app/pages/MyCart.dart';
 
 void signOut(BuildContext context) async {
   await FirebaseAuth.instance.signOut();
@@ -14,7 +18,8 @@ void signOut(BuildContext context) async {
 
 //variables declare
 int i = 0;
-List _list = [];
+int key = 0;
+List<Food> list = [];
 
 class foodDetails extends StatefulWidget {
   final String image;
@@ -43,20 +48,30 @@ class _foodDetailsState extends State<foodDetails> {
 
     return Scaffold(
         body: SafeArea(
+            child: Container(
+      width: w,
+      height: double.infinity,
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // back button
             Container(
-              margin: EdgeInsets.fromLTRB(0, 0, 0, 20),
+              alignment: Alignment.bottomLeft,
+              width: w,
+              margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
               child: IconButton(
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                icon: Icon(Icons.arrow_back),
+                icon: Icon(
+                  Icons.arrow_back,
+                  size: 40,
+                ),
                 alignment: Alignment.centerRight,
               ),
             ),
+            // photo
             Center(
               child: Material(
                 elevation: 10,
@@ -68,7 +83,7 @@ class _foodDetailsState extends State<foodDetails> {
                 child: Container(
                   // margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
                   width: w * 0.9,
-                  height: h * 0.4,
+                  height: h * 0.3,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(20),
@@ -81,6 +96,7 @@ class _foodDetailsState extends State<foodDetails> {
                 ),
               ),
             ),
+            // Heading Food Name
             Container(
               padding: EdgeInsets.all(8),
               margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
@@ -92,14 +108,16 @@ class _foodDetailsState extends State<foodDetails> {
                     fontFamily: 'Ubuntu'),
               ),
             ),
+            // description
             Container(
               padding: EdgeInsets.all(8),
               margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
               child: Text(
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum",
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sea deserunt mollit anim id est laborum",
                 style: TextStyle(fontSize: 30),
               ),
             ),
+            // price
             Container(
               padding: EdgeInsets.all(8),
               margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
@@ -108,6 +126,7 @@ class _foodDetailsState extends State<foodDetails> {
                 style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
               ),
             ),
+            // rating
             Container(
               padding: EdgeInsets.all(8),
               margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
@@ -116,10 +135,11 @@ class _foodDetailsState extends State<foodDetails> {
                 style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
               ),
             ),
+            // number of count
             Center(
               child: Container(
                 // color: Colors.brown,
-                margin: EdgeInsets.fromLTRB(0, 40, 0, 0),
+                margin: EdgeInsets.fromLTRB(0, 30, 0, 0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -162,109 +182,36 @@ class _foodDetailsState extends State<foodDetails> {
                 ),
               ),
             ),
-            Center(
-              child: Container(
-                margin: EdgeInsets.fromLTRB(0, 40, 0, 0),
-                decoration: BoxDecoration(),
-                child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.black,
-                    ),
-                    onPressed: () {
-                      retrieveData(context, i, widget.name, widget.price);
 
-                      Navigator.of(context).pop();
-                      setState(() {
-                        i = 0;
-                      });
-                    },
-                    child: Text(
-                      'AddCart',
-                      style: TextStyle(fontSize: 20),
-                    )),
+            SizedBox(
+              // margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+              // decoration: BoxDecoration(color: Colors.lightGreen),
+              width: w,
+              height: h * 0.1,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.black,
+                ),
+                onPressed: () {
+                  Food food =
+                      new Food(key, widget.name, int.parse(widget.price), i);
+                  list.add(food);
+                  new MyCard(list);
+
+                  Navigator.of(context).pop();
+                  setState(() {
+                    i = 0;
+                  });
+                },
+                child: Text(
+                  'AddCart',
+                  style: TextStyle(fontSize: 30),
+                ),
               ),
-            )
+            ),
           ],
         ),
       ),
-    ));
-  }
-
-  retrieveData(BuildContext context, int i, String name, String price) async {
-    var snap = await FirebaseFirestore.instance
-        .collection('Payments')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get(const GetOptions(source: Source.cache));
-
-    print("datassssssss");
-    print(snap.data()!['0']);
-    _list = snap.data()!['0'];
-    addToCart(context, i, name, price);
-  }
-
-  addToCart(BuildContext context, int i, String name, String price) async {
-    bool check = false;
-    bool emptycheck = false;
-    int index = 0;
-    if (_list.isEmpty) {
-      emptycheck = true;
-      _list.add({'name': name, 'price': price, 'count': i});
-    }
-    if (emptycheck == false) {
-      for (int j = 0; j < _list.length; j++) {
-        if (_list[j]['name'] == name) {
-          index = j;
-          check = true;
-          break;
-        }
-      }
-      print(_list);
-      // print("index");
-      // print(index);
-      // print("check");
-      // print(check);
-      emptycheck = false;
-      if (check) {
-        print(_list[index]);
-        _list[index].update('count', (value) => value + i);
-      }
-      if (!check) {
-        _list.add({'name': name, 'price': price, 'count': i});
-      }
-      check = false;
-      print("::::");
-      print(_list);
-
-      var snap = await FirebaseFirestore.instance
-          .collection("Payments")
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .get(const GetOptions(source: Source.cache));
-
-      if (snap.data()!['0'].length == 0) {
-        FirebaseFirestore.instance
-            .collection("Payments")
-            .doc(FirebaseAuth.instance.currentUser!.uid)
-            .set({"0": _list});
-      } else {
-        FirebaseFirestore.instance
-            .collection("Payments")
-            .doc(FirebaseAuth.instance.currentUser!.uid)
-            .set({"0": _list});
-      }
-      // for (int k = 0; k < _list.length; k++) {
-      // await FirebaseFirestore.instance
-      //     .collection("Payments")
-      //     .doc(FirebaseAuth.instance.currentUser!.uid)
-      //     .update({
-      //   "0": [_list]
-      // });
-    }
-
-    // for (int k = 0; k < _list.length; k++) {
-    await FirebaseFirestore.instance
-        .collection("Payments")
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .set({"0": _list});
-    // }
+    )));
   }
 }

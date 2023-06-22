@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/Foods/BreakFastFoods.dart';
-import 'package:my_app/Foods/Desserts.dart';
-import 'package:my_app/Foods/LunchFoods.dart';
-import 'package:my_app/Foods/DinnerFoods.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:my_app/main.dart';
 import 'package:my_app/pages/MyCart.dart';
+import 'package:my_app/pages/RenderMenuItems.dart';
 import 'LoginPage.dart';
 
 void signOut(BuildContext context) async {
@@ -43,7 +41,7 @@ class _menuItemsState extends State<menuItems> {
               toolbarHeight: 120,
               centerTitle: true,
               elevation: 0,
-              backgroundColor: Colors.white,
+              backgroundColor: Colors.white70,
               title: Text(
                 'Menu',
                 style: TextStyle(fontSize: 100, color: Colors.blueGrey),
@@ -61,11 +59,32 @@ class _menuItemsState extends State<menuItems> {
                 // isScrollable: true,
                 labelColor: Colors.black,
                 indicatorColor: Colors.black54,
+
                 tabs: [
-                  Tab(text: 'BreakFast'),
-                  Tab(text: 'Lunch'),
-                  Tab(text: 'Dinner'),
-                  Tab(text: 'Desserts')
+                  Tab(
+                    child: Text(
+                      "BreakFast",
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ),
+                  Tab(
+                    child: Text(
+                      "Lunch",
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ),
+                  Tab(
+                    child: Text(
+                      "Dinner",
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ),
+                  Tab(
+                    child: Text(
+                      "Desserts",
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  )
                 ],
               ),
             ),
@@ -73,16 +92,16 @@ class _menuItemsState extends State<menuItems> {
           body: TabBarView(
             children: [
               Tab(
-                child: breakFastFoods(),
+                child: RenderMenuItems('Breakfast'),
               ),
               Tab(
-                child: lunchFoods(),
+                child: RenderMenuItems('Lunch'),
               ),
               Tab(
-                child: dinnerFoods(),
+                child: RenderMenuItems('Dinner'),
               ),
               Tab(
-                child: Desserts(),
+                child: RenderMenuItems('Desserts'),
               )
             ],
           ),

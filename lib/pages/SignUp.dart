@@ -18,17 +18,26 @@ String _address = '';
 String _cardNo = '';
 
 void signup(BuildContext context) async {
-  await _auth
-      .createUserWithEmailAndPassword(email: _email, password: _password)
-      .catchError((onError) {
-    print(onError);
-  }).then((authuser) {
-    if (authuser.user != null) {
+  try {
+    print(_email);
+    print(_password);
+    // Create the user with email and password
+    UserCredential authUser = await _auth.createUserWithEmailAndPassword(
+      email: _email.trim(),
+      password: _password.trim(),
+    );
+
+    if (authUser.user != null) {
+      // Add user details to Firestore
       addFireStore(context);
+
+      // Navigate to the login page
       Navigator.of(context)
           .push(MaterialPageRoute(builder: (context) => LoginPage()));
     }
-  });
+  } catch (error) {
+    print(error);
+  }
 }
 
 Future<void> addFireStore(BuildContext context) async {
