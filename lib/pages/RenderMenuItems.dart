@@ -1,31 +1,30 @@
 import 'dart:ui';
-
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:my_app/Foods/FoodDetails.dart';
 
-import 'FoodDetails.dart';
-
-class breakFastFoods extends StatefulWidget {
-  const breakFastFoods({Key? key}) : super(key: key);
+class RenderMenuItems extends StatefulWidget {
+  final String food_name;
+  const RenderMenuItems(this.food_name);
 
   @override
-  _breakFastFoodsState createState() => _breakFastFoodsState();
+  _RenderMenuItemsState createState() => _RenderMenuItemsState();
 }
 
-class _breakFastFoodsState extends State<breakFastFoods> {
+class _RenderMenuItemsState extends State<RenderMenuItems> {
+  String get food_name => widget.food_name;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: BuildCard(context),
-    );
+    return Scaffold(body: BuildCard(context));
   }
 
   Widget BuildCard(BuildContext context) {
+    print(food_name);
     return StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('Foods')
-            .doc('Breakfast')
+            .doc(food_name)
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasError) {

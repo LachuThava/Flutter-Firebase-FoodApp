@@ -16,7 +16,7 @@ class BottomNavBar extends StatefulWidget {
 }
 
 int index = 0;
-final tabs = [menuItems(), mycard(), user()];
+final tabs = [menuItems(), MyCard([]), user()];
 final _auth = FirebaseAuth.instance;
 
 void signOut(BuildContext context) async {
@@ -42,18 +42,34 @@ class _BottomNavBarState extends State<BottomNavBar> {
           selectedItemColor: Colors.black,
           unselectedItemColor: Colors.black54,
           currentIndex: index,
+          iconSize: 40,
           items: [
             BottomNavigationBarItem(
               icon: Icon(FontAwesomeIcons.houseUser),
-              title: Text('Biriyani'),
+              title: Text(
+                'Biriyani',
+                style: TextStyle(
+                  fontSize: 18,
+                ),
+              ),
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.shopping_cart),
-              title: Text('my cart'),
+              title: Text(
+                'my cart',
+                style: TextStyle(
+                  fontSize: 18,
+                ),
+              ),
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.person),
-              title: Text('Account'),
+              title: Text(
+                'Account',
+                style: TextStyle(
+                  fontSize: 18,
+                ),
+              ),
             ),
           ],
           onTap: (current_index) {
